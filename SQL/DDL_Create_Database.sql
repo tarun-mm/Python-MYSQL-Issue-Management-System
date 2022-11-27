@@ -1,0 +1,104 @@
+CREATE DATABASE Issues_PES1UG20CS462;
+
+USE Issues_PES1UG20CS462;
+
+CREATE TABLE Status
+(
+  Status_ID INT NOT NULL,
+  Status_desc VARCHAR(50) NOT NULL,
+  PRIMARY KEY (Status_ID)
+);
+
+CREATE TABLE Role
+(
+  Role_ID INT NOT NULL,
+  Role_name VARCHAR(20) NOT NULL,
+  Role_desc VARCHAR(50) NOT NULL,
+  PRIMARY KEY (Role_ID)
+);
+
+CREATE TABLE Type
+(
+  Type_ID INT NOT NULL,
+  Type_desc VARCHAR(50) NOT NULL,
+  PRIMARY KEY (Type_ID)
+);
+
+CREATE TABLE User
+(
+  User_ID INT NOT NULL,
+  User_email VARCHAR(20) NOT NULL,
+  User_name VARCHAR(20) NOT NULL,
+  User_phone VARCHAR(10) NOT NULL,
+  Role_ID INT NOT NULL,
+  PRIMARY KEY (User_ID),
+  FOREIGN KEY (Role_ID) 
+    REFERENCES Role(Role_ID)
+    ON UPDATE CASCADE ON DELETE CASCADE,
+  UNIQUE (User_email),
+  UNIQUE (User_phone),
+  CONSTRAINT chk_phone CHECK (REGEXP_LIKE(User_phone, '^[1-9][0-9]{9}$'))
+);
+
+CREATE TABLE Issue
+(
+  Issue_ID INT NOT NULL,
+  Issue_desc VARCHAR(50) NOT NULL,
+  Issue_date DATE NOT NULL,
+  Status_ID INT NOT NULL,
+  User_ID INT NOT NULL,
+  Type_ID INT NOT NULL,
+  PRIMARY KEY (Issue_ID),
+  FOREIGN KEY (Status_ID) 
+    REFERENCES Status(Status_ID)
+    ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (User_ID) 
+    REFERENCES User(User_ID)
+    ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (Type_ID) 
+    REFERENCES Type(Type_ID)
+    ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE Attachment
+(
+  Attachment_ID INT NOT NULL,
+  Attachment_file_name VARCHAR(20) NOT NULL,
+  Attachment_file_type VARCHAR(10) NOT NULL,
+  Issue_ID INT NOT NULL,
+  PRIMARY KEY (Attachment_ID),
+  FOREIGN KEY (Issue_ID) 
+    REFERENCES Issue(Issue_ID)
+    ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE Backup_Issue(
+  Issue_ID INT NOT NULL,
+  Issue_desc VARCHAR(50) NOT NULL,
+  Issue_date DATE NOT NULL,
+  Status_ID INT NOT NULL,
+  User_ID INT NOT NULL,
+  Type_ID INT NOT NULL,
+  PRIMARY KEY (Issue_ID),
+  FOREIGN KEY (Status_ID) 
+    REFERENCES Status(Status_ID)
+    ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (User_ID) 
+    REFERENCES User(User_ID)
+    ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (Type_ID) 
+    REFERENCES Type(Type_ID)
+    ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE Backup_Attachment
+(
+  Attachment_ID INT NOT NULL,
+  Attachment_file_name VARCHAR(20) NOT NULL,
+  Attachment_file_type VARCHAR(10) NOT NULL,
+  Issue_ID INT NOT NULL,
+  PRIMARY KEY (Attachment_ID),
+  FOREIGN KEY (Issue_ID) 
+    REFERENCES Issue(Issue_ID)
+    ON UPDATE CASCADE ON DELETE CASCADE
+);

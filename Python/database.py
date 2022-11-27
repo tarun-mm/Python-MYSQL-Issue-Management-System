@@ -1,7 +1,7 @@
 import mysql.connector
 
 database = mysql.connector.connect(
-    host="localhost", user="root", password="sneilium", database="Issues_PES1UG20CS462"
+    host="localhost", user="root", password="", database="Issues_PES1UG20CS462"
 )
 curs = database.cursor()
 
